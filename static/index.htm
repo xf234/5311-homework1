@@ -99,9 +99,21 @@
               right: 20px;
               width: 300px;  */
         }
+
         .gridlines line {
             stroke: #D3D3D3;
-          }
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: white;
+            transition: all 0.3s ease;
+            box-shadow: 2px 10px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 
 </head>
@@ -139,12 +151,66 @@
         <span id="range">2000</span>
         <div class="center">Move the slider to inspect the data from 1990 - 2009</div>
     </div>
+    <p style="padding-left: 50px; padding-right: 50px; padding-bottom: 50px;">
+        In the early 1990s, major hubs such as Atlanta (ATL), Chicago O'Hare (ORD), Dallas/Fort Worth (DFW), and New
+        York's JFK saw considerable traffic, serving as key nodes for both domestic and international flights. New
+        routes added during this period primarily expanded from these hubs, focusing on connecting major cities across
+        the U.S. <br>
 
-    <svg id="linechart" width="900" height="450"></svg>
+        In the mid 1990s, Cities like Denver (DEN), Phoenix (PHX), and Philadelphia (PHL) saw an increase in routes,
+        particularly from airlines looking to expand their footprint. <br>
 
-    <a href="calendar.html">go to calendar</a>
-    <a href="calendar2.html">go to calendar2</a>
-    
+        After 9/11, as the industry recovered, there was a shift towards enhancing connectivity from mid-sized airports,
+        adding routes from the southwest (ex. Las Vegas)
+
+    </p>
+
+
+    <div style="display: flex;">
+        <div>
+            <h4 style="text-align: center;">Revenue Passenger Miles (RPM) vs. the growth rate of GDP </h4>
+
+            <svg id="linechart" width="900" height="450"></svg>
+        </div>
+        <div>
+
+            <p style="padding-top: 30px;">
+                The aviation industry grew rapidly during 1900 to 2009. Not only was the increased traffic a result of
+                the
+                aviation technology advancement, but also a vital indication of global and domestic economic
+                development.
+                This chart looks at the growth rate of the Revenue Passenger Miles (RPM) vs. the growth rate of GDP from
+                2000 to 2009. RPM is calculated by multiplying the number of paying passengers by the distance
+                travelled, an
+                important indicator for traffic volume. <br> <br>
+
+                Over the two decades, the RPM growth rate is consistently above 0, except for the year of 2001 and the
+                year
+                of 2008 to 2009. The consistent RPM growth can be attributed to economic growth, globalization and
+                advancement in aviation technology. The GDP growth rate is consistently above 4% during that period,
+                boosting business travel and individuals’ disposable income, allowing more people to spend on leisure
+                activities. On the other end, GDP growth boosts international trade and necessity for travel. In
+                addition,
+                advancement in aviation technology also improves aircraft efficiency, encourages more people to travel.
+                <br><br>
+
+                The terrorist attack on 9/11 had an immediate profound impact on air travel. Fears of travel led to a
+                significance drop in air travel demand, resulting in a -6% growth rate in RPM in 2001. On the other
+                hand,
+                the Financial Crisis that began in 2008 contributed to the declining air traffic in 2008. The economic
+                recession, indicated by the negative GDP growth rate forces people to cut back on travel expenses,
+                resulting
+                in negative RPM growth.
+
+            </p>
+        </div>
+
+    </div>
+    <div style="display: flex;justify-content: center; margin: 30px;">
+
+        <a href="calendar2.html">Go to calendar to see changes of most popular airports in each months</a>
+    </div>
+
     <script>
         const svg_map = d3.select("#svg_map")
         const svg_map2 = d3.select("#svg_map2")
@@ -430,163 +496,163 @@
 
     </script>
 
-<script>
-    const svg = d3.select("#linechart");
-    const width = svg.attr("width");
-    const height = svg.attr("height");
-    const margin = { top: 80, right: 120, bottom: 50, left: 100 };
-    const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
-    const events = [
-      { year: 2001, description: "9/11", detail: "9/11: A series of four coordinated terrorist attacks by the Islamic terrorist group al-Qaeda against the United States." },
-      { year: 2008, description: "Financial Crisis", detail: "Financial Crisis: A major worldwide economic crisis that led to the Great Recession." },
-      { year: 2003, description: "SARS" }
-    ];
-  
-    let annotations = svg.append("g").attr("id", "annotations");
-    let chartArea = svg.append("g").attr("id", "points").attr("transform", `translate(${margin.left},${margin.top})`);
-  
-    d3.csv("data/data_20yr.csv").then((data) => {
-  
-      const yScale = d3.scaleLinear().domain([-5, 10]).range([chartHeight, 0]);
-      let leftAxis = d3.axisLeft(yScale).tickFormat(d => `${d}%`);
-      let leftGridlines = d3.axisLeft(yScale)
-        .tickSize(-chartWidth - 10)
-        .tickFormat("");
-      annotations.append("g")
-        .attr("class", "y axis")
-        .attr("transform", `translate(${margin.left - 10},${margin.top})`)
-        .call(leftAxis);
-  
-      annotations.append("g")
-        .attr("class", "y gridlines")
-        .attr("transform", `translate(${margin.left - 10},${margin.top})`)
-        .call(leftGridlines);
-  
-      svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -chartHeight / 2)
-        .attr("y", -margin.top + 90)
-        .style("text-anchor", "middle")
-        .style("font-size", "15px")
-        .text("Growth Rate");
-  
-      // x axis
-  
-      const dateScale = d3.scaleLinear().domain([1990, 2009]).range([0, chartWidth]);
-      let bottomAxis = d3.axisBottom(dateScale).tickFormat(d3.format("d"));
-      let bottomGridlines = d3.axisBottom(dateScale)
-        .tickSize(-chartHeight - 10)
-        .tickFormat("")
-      annotations.append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(${margin.left},${chartHeight + margin.top + 10})`)
-        .call(bottomAxis);
-      annotations.append("g")
-        .attr("class", "x gridlines")
-        .attr("transform", `translate(${margin.left},${chartHeight + margin.top + 10})`)
-        .call(bottomGridlines);
-      svg.append("text")
-        .attr("transform", "translate(" + (chartWidth / 2 + 40) + "," + (chartHeight + margin.top + 40) + ")")
-        .style("text-anchor", "middle")
-        .style("font-size", "15px")
-        .text("Year")
-  
-      const legendData = [
-        { label: "GDP Growth", color: "blue" },
-        { label: "RPK Growth", color: "red" }
-      ];
-  
-      // Create a legend group
-      const legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("transform", `translate(${width - margin.right}, ${margin.top})`); // Adjust as needed
-  
-  
-      var lineGen = d3.line()
-        .x(d => dateScale(d['year']))
-        .y(d => yScale(d.gdp_growth));
-  
-      var lineGen_rpk = d3.line()
-        .x(d => dateScale(d['year']))
-        .y(d => yScale(d.rpk_growth));
-  
-  
-      let gTag = chartArea.append("g").attr("class", "line-gdp");
-      let gTag_rpk = chartArea.append("g").attr("class", "line-rpk");
-  
-      gTag.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("stroke-width", "2px")
-        .attr("d", lineGen);
-  
-      gTag_rpk.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "red")
-        .attr("stroke-width", "2px")
-        .attr("d", lineGen_rpk);
-  
-      gTag.selectAll("circle")
-        .data(data)
-        .join('circle')
-        .attr("cx", d => dateScale(d.year))
-        .attr("cy", d => yScale(d.gdp_growth))
-        .attr("r", "2px")
-        .attr("fill", "blue");
-  
-      events.forEach(event => {
-        let line = chartArea.append("line")
-          .attr("x1", dateScale(event.year))
-          .attr("y1", 0)
-          .attr("x2", dateScale(event.year))
-          .attr("y2", chartHeight)
-          .attr("x3", dateScale(event.year))
-          .attr("y3", chartHeight)
-          .attr("stroke", "black")
-          .attr("stroke-width", 2)
-          .attr("stroke-dasharray", "5,5")
-          .style("cursor", "pointer"); // Change cursor to pointer on hover to indicate interactivity
-  
-        // Append text labels for each event
-        chartArea.append("text")
-          .attr("x", dateScale(event.year))
-          .attr("y", -5)
-          .attr("text-anchor", "middle")
-          .text(event.description)
-          .style("font-size", "12px");
-  
-        line.on("click", () => {
-          d3.select("#event-details")
-            .style("display", "block")
-            .html(`<strong>${event.description}</strong><br/>${event.detail}`);
+    <script>
+        const svg = d3.select("#linechart");
+        const width = svg.attr("width");
+        const height = svg.attr("height");
+        const margin = { top: 80, right: 120, bottom: 50, left: 100 };
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+        const events = [
+            { year: 2001, description: "9/11", detail: "9/11: A series of four coordinated terrorist attacks by the Islamic terrorist group al-Qaeda against the United States." },
+            { year: 2008, description: "Financial Crisis", detail: "Financial Crisis: A major worldwide economic crisis that led to the Great Recession." },
+            { year: 2003, description: "SARS" }
+        ];
+
+        let annotations = svg.append("g").attr("id", "annotations");
+        let chartArea = svg.append("g").attr("id", "points").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        d3.csv("data/data_20yr.csv").then((data) => {
+
+            const yScale = d3.scaleLinear().domain([-5, 10]).range([chartHeight, 0]);
+            let leftAxis = d3.axisLeft(yScale).tickFormat(d => `${d}%`);
+            let leftGridlines = d3.axisLeft(yScale)
+                .tickSize(-chartWidth - 10)
+                .tickFormat("");
+            annotations.append("g")
+                .attr("class", "y axis")
+                .attr("transform", `translate(${margin.left - 10},${margin.top})`)
+                .call(leftAxis);
+
+            annotations.append("g")
+                .attr("class", "y gridlines")
+                .attr("transform", `translate(${margin.left - 10},${margin.top})`)
+                .call(leftGridlines);
+
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -chartHeight / 2)
+                .attr("y", -margin.top + 90)
+                .style("text-anchor", "middle")
+                .style("font-size", "15px")
+                .text("Growth Rate");
+
+            // x axis
+
+            const dateScale = d3.scaleLinear().domain([1990, 2009]).range([0, chartWidth]);
+            let bottomAxis = d3.axisBottom(dateScale).tickFormat(d3.format("d"));
+            let bottomGridlines = d3.axisBottom(dateScale)
+                .tickSize(-chartHeight - 10)
+                .tickFormat("")
+            annotations.append("g")
+                .attr("class", "x axis")
+                .attr("transform", `translate(${margin.left},${chartHeight + margin.top + 10})`)
+                .call(bottomAxis);
+            annotations.append("g")
+                .attr("class", "x gridlines")
+                .attr("transform", `translate(${margin.left},${chartHeight + margin.top + 10})`)
+                .call(bottomGridlines);
+            svg.append("text")
+                .attr("transform", "translate(" + (chartWidth / 2 + 40) + "," + (chartHeight + margin.top + 40) + ")")
+                .style("text-anchor", "middle")
+                .style("font-size", "15px")
+                .text("Year")
+
+            const legendData = [
+                { label: "GDP Growth", color: "blue" },
+                { label: "RPM Growth", color: "red" }
+            ];
+
+            // Create a legend group
+            const legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", `translate(${width - margin.right + 10}, ${margin.top})`); // Adjust as needed
+
+
+            var lineGen = d3.line()
+                .x(d => dateScale(d['year']))
+                .y(d => yScale(d.gdp_growth));
+
+            var lineGen_rpk = d3.line()
+                .x(d => dateScale(d['year']))
+                .y(d => yScale(d.rpk_growth));
+
+
+            let gTag = chartArea.append("g").attr("class", "line-gdp");
+            let gTag_rpk = chartArea.append("g").attr("class", "line-rpk");
+
+            gTag.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", "2px")
+                .attr("d", lineGen);
+
+            gTag_rpk.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "red")
+                .attr("stroke-width", "2px")
+                .attr("d", lineGen_rpk);
+
+            gTag.selectAll("circle")
+                .data(data)
+                .join('circle')
+                .attr("cx", d => dateScale(d.year))
+                .attr("cy", d => yScale(d.gdp_growth))
+                .attr("r", "2px")
+                .attr("fill", "blue");
+
+            events.forEach(event => {
+                let line = chartArea.append("line")
+                    .attr("x1", dateScale(event.year))
+                    .attr("y1", 0)
+                    .attr("x2", dateScale(event.year))
+                    .attr("y2", chartHeight)
+                    .attr("x3", dateScale(event.year))
+                    .attr("y3", chartHeight)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 2)
+                    .attr("stroke-dasharray", "5,5")
+                    .style("cursor", "pointer"); // Change cursor to pointer on hover to indicate interactivity
+
+                // Append text labels for each event
+                chartArea.append("text")
+                    .attr("x", dateScale(event.year))
+                    .attr("y", -5)
+                    .attr("text-anchor", "middle")
+                    .text(event.description)
+                    .style("font-size", "12px");
+
+                line.on("click", () => {
+                    d3.select("#event-details")
+                        .style("display", "block")
+                        .html(`<strong>${event.description}</strong><br/>${event.detail}`);
+                });
+            });
+
+            legend.selectAll("rect")
+                .data(legendData)
+                .enter().append("rect")
+                .attr("x", 0)
+                .attr("y", (d, i) => i * 20) // Offset each legend item vertically
+                .attr("width", 10)
+                .attr("height", 10)
+                .style("fill", d => d.color);
+
+            // Append text labels to legend
+            legend.selectAll("text")
+                .data(legendData)
+                .enter().append("text")
+                .attr("x", 15)
+                .attr("y", (d, i) => i * 20 + 9) // Vertically align text with rectangles
+                .text(d => d.label)
+                .style("font-size", "12px")
+                .attr("text-anchor", "start")
+                .style("alignment-baseline", "middle");
+
         });
-      });
-  
-      legend.selectAll("rect")
-        .data(legendData)
-        .enter().append("rect")
-        .attr("x", 0)
-        .attr("y", (d, i) => i * 20) // Offset each legend item vertically
-        .attr("width", 10)
-        .attr("height", 10)
-        .style("fill", d => d.color);
-  
-      // Append text labels to legend
-      legend.selectAll("text")
-        .data(legendData)
-        .enter().append("text")
-        .attr("x", 15)
-        .attr("y", (d, i) => i * 20 + 9) // Vertically align text with rectangles
-        .text(d => d.label)
-        .style("font-size", "12px")
-        .attr("text-anchor", "start")
-        .style("alignment-baseline", "middle");
-  
-    });
-  </script>
+    </script>
 
 </body>
 
